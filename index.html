@@ -2,6 +2,8 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>この人まだ生きてる？クイズ</title>
 
 <style>
@@ -10,14 +12,40 @@ body{
     max-width:800px;
     margin:auto;
     padding:20px;
+    text-align:center;
 }
 
-.person{
-    margin:10px 0;
+h1{
+    margin-bottom:10px;
+}
+
+#timer{
+    font-size:24px;
+    color:red;
+    margin:20px;
+}
+
+#question{
+    font-size:32px;
+    margin:40px 0;
 }
 
 button{
-    margin-left:10px;
+    font-size:24px;
+    padding:10px 30px;
+    margin:10px;
+    cursor:pointer;
+}
+
+#message{
+    font-size:24px;
+    margin-top:20px;
+    min-height:40px;
+}
+
+#score{
+    font-size:20px;
+    margin-top:20px;
 }
 </style>
 </head>
@@ -26,56 +54,125 @@ button{
 
 <h1>この人まだ生きてる？クイズ</h1>
 
-<div id="quiz"></div>
+<div id="timer">残り60秒</div>
 
-<button onclick="scoreQuiz()">採点</button>
+<div id="score"></div>
 
-<h2 id="result"></h2>
+<div id="question"></div>
+
+<div id="buttons">
+    <button onclick="answer(true)">○ 生存</button>
+    <button onclick="answer(false)">× 死亡</button>
+</div>
+
+<div id="message"></div>
 
 <script>
 
 const people = [
-{ name:"美輪明宏", alive:true },
-{ name:"瀬戸内寂聴", alive:false },
-{ name:"細木数子", alive:false },
-{ name:"假屋崎省吾", alive:true },
-{ name:"大屋政子", alive:false }
+
+{name:"美輪明宏",alive:true},
+{name:"瀬戸内寂聴",alive:false},
+{name:"細木数子",alive:false},
+{name:"假屋崎省吾",alive:true},
+{name:"大屋政子",alive:false},
+{name:"塩沢とき",alive:false},
+{name:"大山のぶ代",alive:false},
+{name:"樹木希林",alive:false},
+{name:"岸田今日子",alive:false},
+{name:"市原悦子",alive:false},
+{name:"ガッツ石松",alive:true},
+{name:"具志堅用高",alive:true},
+{name:"渡嘉敷勝男",alive:true},
+{name:"森本レオ",alive:true},
+{name:"曙太郎",alive:false},
+{name:"小錦八十吉",alive:true},
+{name:"ウガンダ・トラ",alive:false},
+{name:"グレート義太夫",alive:true},
+{name:"彦摩呂",alive:true},
+{name:"やくみつる",alive:true},
+{name:"つのだじろう",alive:true},
+{name:"イッセー尾形",alive:true},
+{name:"レオナルド熊",alive:false}
+
 ];
 
-let html="";
+// シャッフル
+people.sort(() => Math.random() - 0.5);
 
-people.forEach((p,i)=>{
-html += `
-<div class="person">
-${p.name}
-<label><input type="radio" name="p${i}" value="true">○</label>
-<label><input type="radio" name="p${i}" value="false">×</label>
-</div>
-`;
-});
+let current = 0;
+let correct = 0;
+let answered = 0;
+let timeLeft = 60;
 
-document.getElementById("quiz").innerHTML=html;
+function showQuestion(){
 
-function scoreQuiz(){
+    if(current >= people.length){
+        finishQuiz();
+        return;
+    }
 
-let score=0;
+    document.getElementById("question").innerText =
+        people[current].name;
 
-people.forEach((p,i)=>{
-
-const ans=document.querySelector(
-`input[name="p${i}"]:checked`
-);
-
-if(ans && String(p.alive)===ans.value){
-score++;
+    document.getElementById("score").innerText =
+        `正解数 ${correct} / ${answered}`;
 }
 
-});
+function answer(choice){
 
-document.getElementById("result").innerHTML =
-`${people.length}問中 ${score}問正解！`;
+    const person = people[current];
 
+    if(choice === person.alive){
+
+        correct++;
+
+        document.getElementById("message").innerHTML =
+            "⭕ 正解";
+    }else{
+
+        document.getElementById("message").innerHTML =
+            "❌ 不正解";
+    }
+
+    answered++;
+    current++;
+
+    setTimeout(showQuestion,500);
 }
+
+function finishQuiz(){
+
+    document.getElementById("question").innerHTML =
+        `終了！<br><br>${answered}問中 ${correct}問正解`;
+
+    document.getElementById("buttons").style.display="none";
+
+    document.getElementById("message").innerHTML="";
+}
+
+showQuestion();
+
+const timer = setInterval(()=>{
+
+    timeLeft--;
+
+    document.getElementById("timer").innerText =
+        `残り${timeLeft}秒`;
+
+    if(timeLeft <= 0){
+
+        clearInterval(timer);
+
+        document.getElementById("question").innerHTML =
+            `時間切れ！<br><br>${answered}問中 ${correct}問正解`;
+
+        document.getElementById("buttons").style.display="none";
+
+        document.getElementById("message").innerHTML="";
+    }
+
+},1000);
 
 </script>
 
