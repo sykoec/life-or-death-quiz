@@ -9,7 +9,7 @@
 <style>
 body{
     font-family:sans-serif;
-    max-width:800px;
+    max-width:900px;
     margin:auto;
     padding:20px;
     text-align:center;
@@ -38,15 +38,38 @@ button{
 }
 
 #message{
-    font-size:24px;
+    font-size:20px;
     margin-top:20px;
-    min-height:40px;
+    min-height:80px;
 }
 
 #score{
     font-size:20px;
     margin-top:20px;
 }
+
+.result{
+    text-align:left;
+    border:1px solid #ccc;
+    padding:10px;
+    margin:10px 0;
+    border-radius:8px;
+}
+
+.correct{
+    color:green;
+    font-weight:bold;
+}
+
+.wrong{
+    color:red;
+    font-weight:bold;
+}
+
+.review{
+    background:#fff8e1;
+}
+
 </style>
 </head>
 
@@ -71,39 +94,166 @@ button{
 
 const people = [
 
-{name:"美輪明宏",alive:true},
-{name:"瀬戸内寂聴",alive:false},
-{name:"細木数子",alive:false},
-{name:"假屋崎省吾",alive:true},
-{name:"大屋政子",alive:false},
-{name:"塩沢とき",alive:false},
-{name:"大山のぶ代",alive:false},
-{name:"樹木希林",alive:false},
-{name:"岸田今日子",alive:false},
-{name:"市原悦子",alive:false},
-{name:"ガッツ石松",alive:true},
-{name:"具志堅用高",alive:true},
-{name:"渡嘉敷勝男",alive:true},
-{name:"森本レオ",alive:true},
-{name:"曙太郎",alive:false},
-{name:"小錦八十吉",alive:true},
-{name:"ウガンダ・トラ",alive:false},
-{name:"グレート義太夫",alive:true},
-{name:"彦摩呂",alive:true},
-{name:"やくみつる",alive:true},
-{name:"つのだじろう",alive:true},
-{name:"イッセー尾形",alive:true},
-{name:"レオナルド熊",alive:false}
+{
+    name:"美輪明宏",
+    alive:true,
+    born:1935,
+    note:"歌手・俳優・演出家。現在も活動している。"
+},
+{
+    name:"瀬戸内寂聴",
+    alive:false,
+    born:1922,
+    died:2021,
+    note:"作家・僧侶。2021年逝去。"
+},
+{
+    name:"細木数子",
+    alive:false,
+    born:1938,
+    died:2021,
+    note:"占術家。六星占術で知られる。"
+},
+{
+    name:"假屋崎省吾",
+    alive:true,
+    born:1958,
+    note:"華道家。テレビ出演も多い。"
+},
+{
+    name:"大屋政子",
+    alive:false,
+    born:1921,
+    died:1999,
+    note:"タレント・実業家。"
+},
+{
+    name:"塩沢とき",
+    alive:false,
+    born:1928,
+    died:2007,
+    note:"個性的な女優として活躍。"
+},
+{
+    name:"大山のぶ代",
+    alive:false,
+    born:1933,
+    died:2024,
+    note:"ドラえもん役で有名な声優。"
+},
+{
+    name:"樹木希林",
+    alive:false,
+    born:1943,
+    died:2018,
+    note:"日本を代表する女優。"
+},
+{
+    name:"岸田今日子",
+    alive:false,
+    born:1930,
+    died:2006,
+    note:"女優・声優。"
+},
+{
+    name:"市原悦子",
+    alive:false,
+    born:1936,
+    died:2019,
+    note:"『まんが日本昔ばなし』の語り手。"
+},
+{
+    name:"ガッツ石松",
+    alive:true,
+    born:1949,
+    note:"元プロボクサー・タレント。"
+},
+{
+    name:"具志堅用高",
+    alive:true,
+    born:1955,
+    note:"元WBA世界王者。"
+},
+{
+    name:"渡嘉敷勝男",
+    alive:true,
+    born:1960,
+    note:"元プロボクサー。"
+},
+{
+    name:"森本レオ",
+    alive:true,
+    born:1943,
+    note:"俳優・ナレーター。"
+},
+{
+    name:"曙太郎",
+    alive:false,
+    born:1969,
+    died:2024,
+    note:"元横綱。"
+},
+{
+    name:"小錦八十吉",
+    alive:true,
+    born:1963,
+    note:"元大関。タレントとしても活動。"
+},
+{
+    name:"ウガンダ・トラ",
+    alive:false,
+    born:1952,
+    died:2008,
+    note:"タレント・ダンサー。"
+},
+{
+    name:"グレート義太夫",
+    alive:true,
+    born:1958,
+    note:"たけし軍団のメンバー。"
+},
+{
+    name:"彦摩呂",
+    alive:true,
+    born:1966,
+    note:"グルメリポーター。"
+},
+{
+    name:"やくみつる",
+    alive:true,
+    born:1959,
+    note:"漫画家・コラムニスト。"
+},
+{
+    name:"つのだじろう",
+    alive:true,
+    born:1939,
+    note:"漫画家。『恐怖新聞』で有名。"
+},
+{
+    name:"イッセー尾形",
+    alive:true,
+    born:1952,
+    note:"一人芝居で知られる俳優。"
+},
+{
+    name:"レオナルド熊",
+    alive:false,
+    born:1935,
+    died:1994,
+    note:"コメディアン。"
+}
 
 ];
 
-// シャッフル
 people.sort(() => Math.random() - 0.5);
 
 let current = 0;
 let correct = 0;
 let answered = 0;
 let timeLeft = 60;
+
+let history = [];
 
 function showQuestion(){
 
@@ -123,32 +273,161 @@ function answer(choice){
 
     const person = people[current];
 
-    if(choice === person.alive){
+    const isCorrect =
+        choice === person.alive;
 
-        correct++;
+    if(isCorrect) correct++;
 
-        document.getElementById("message").innerHTML =
-            "⭕ 正解";
+    history.push({
+        name:person.name,
+        userAnswer:choice,
+        correctAnswer:person.alive,
+        result:isCorrect,
+        born:person.born,
+        died:person.died,
+        note:person.note
+    });
+
+    let message =
+        isCorrect
+        ? "<span class='correct'>⭕ 正解</span>"
+        : "<span class='wrong'>❌ 不正解</span>";
+
+    message += "<br><br>";
+
+    if(person.alive){
+
+        message += `
+        現在も存命<br>
+        ${person.born}年生まれ<br>
+        ${person.note}
+        `;
+
     }else{
 
-        document.getElementById("message").innerHTML =
-            "❌ 不正解";
+        message += `
+        ${person.born}～${person.died}<br>
+        ${person.note}
+        `;
     }
+
+    document.getElementById("message").innerHTML =
+        message;
 
     answered++;
     current++;
 
-    setTimeout(showQuestion,500);
+    setTimeout(showQuestion,2500);
 }
 
 function finishQuiz(){
 
+    clearInterval(timer);
+
+    let html = `
+    <h2>終了！</h2>
+    <p>${answered}問中 ${correct}問正解</p>
+    <p>正答率 ${
+        answered
+        ? Math.round(correct / answered * 100)
+        : 0
+    }%</p>
+    <hr>
+    `;
+
+    const mistakes =
+        history.filter(x => !x.result);
+
+    if(mistakes.length){
+
+        html += `
+        <h2>復習推奨</h2>
+        `;
+
+        mistakes.forEach(item => {
+
+            html += `
+            <div class="result review">
+
+                <b>${item.name}</b><br>
+
+                あなた：
+                ${item.userAnswer ? "生存":"死亡"}<br>
+
+                正解：
+                ${item.correctAnswer ? "生存":"死亡"}<br>
+
+                <span class="wrong">❌ 不正解</span><br>
+
+                ${item.correctAnswer
+                    ? `${item.born}年生まれ（存命）`
+                    : `${item.born}～${item.died}`
+                }<br>
+
+                ${item.note}
+
+            </div>
+            `;
+        });
+
+        html += "<hr>";
+    }
+
+    html += "<h2>結果一覧</h2>";
+
+    history.forEach((item,index)=>{
+
+        html += `
+        <div class="result">
+
+            <b>${index + 1}. ${item.name}</b><br>
+
+            あなた：
+            ${item.userAnswer ? "生存":"死亡"}<br>
+
+            正解：
+            ${item.correctAnswer ? "生存":"死亡"}<br>
+
+            <span class="${
+                item.result
+                ? "correct"
+                : "wrong"
+            }">
+
+            ${
+                item.result
+                ? "⭕ 正解"
+                : "❌ 不正解"
+            }
+
+            </span>
+
+            <br>
+
+            ${
+                item.correctAnswer
+                ? `${item.born}年生まれ（存命）`
+                : `${item.born}～${item.died}`
+            }
+
+            <br>
+
+            ${item.note}
+
+        </div>
+        `;
+    });
+
     document.getElementById("question").innerHTML =
-        `終了！<br><br>${answered}問中 ${correct}問正解`;
+        html;
 
-    document.getElementById("buttons").style.display="none";
+    document.getElementById("buttons").style.display =
+        "none";
 
-    document.getElementById("message").innerHTML="";
+    document.getElementById("message").innerHTML = "";
+
+    document.getElementById("timer").innerHTML =
+        "終了";
 }
 
 showQuestion();
@@ -162,14 +441,7 @@ const timer = setInterval(()=>{
 
     if(timeLeft <= 0){
 
-        clearInterval(timer);
-
-        document.getElementById("question").innerHTML =
-            `時間切れ！<br><br>${answered}問中 ${correct}問正解`;
-
-        document.getElementById("buttons").style.display="none";
-
-        document.getElementById("message").innerHTML="";
+        finishQuiz();
     }
 
 },1000);
